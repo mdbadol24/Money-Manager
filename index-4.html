@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f5f5fb">
+<title>My Money Manager</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--ink:#171827;--muted:#858797;--purple:#5b42e8;--purple2:#9854ed;--green:#16ad76;--red:#ef4945;--blue:#328bea;--line:#ececf3;--shadow:0 8px 24px #25204b12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;padding-bottom:94px}button,input,select{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:560px;margin:auto;min-height:100vh}.top{padding:20px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.profile{display:flex;align-items:center;gap:12px;min-width:0}.avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#563de5,#a35bf0);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700;flex:none}.greet{font-size:14px;color:var(--muted)}.name{font-size:19px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}.round{width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:21px;color:var(--ink)}
+.balance{margin:10px 18px 20px;padding:24px;border-radius:32px;color:#fff;background:radial-gradient(circle at 100% 0%,#ffffff26 0 110px,transparent 111px),linear-gradient(125deg,#5140e8,#9854ed);box-shadow:0 12px 24px #6248d844;position:relative;overflow:hidden}.balance-head{display:flex;justify-content:space-between;align-items:center;color:#eeeaff;font-size:15px}.month-pill{background:#ffffff25;border-radius:22px;padding:8px 12px;font-size:13px}.total{font-size:39px;font-weight:650;letter-spacing:.2px;margin:22px 0 24px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sum{background:#ffffff27;border-radius:20px;padding:13px;display:flex;gap:10px;align-items:center;min-width:0}.sum-icon{width:38px;height:38px;background:#fff;border-radius:50%;display:grid;place-items:center;font-size:19px;flex:none}.sum small{display:block;color:#eeeaff;font-size:13px}.sum strong{display:block;font-size:17px;white-space:nowrap}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 18px 22px}.quick button{background:none;color:var(--ink);display:flex;align-items:center;flex-direction:column;gap:8px;font-size:13px}.qicon{width:66px;height:66px;border-radius:22px;display:grid;place-items:center;font-size:27px}.q-red{background:#f9e2e4;color:var(--red)}.q-green{background:#ddf2eb;color:var(--green)}.q-blue{background:#e2efff;color:var(--blue)}.q-orange{background:#fff0df;color:#e99522}
+.section{padding:0 18px;margin:12px 0 22px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.section-head h2{font-size:20px;font-weight:550;margin:0}.link{background:none;color:var(--purple);font-size:14px}
+.accounts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.account{background:var(--card);padding:17px;border-radius:25px;box-shadow:var(--shadow);min-width:0}.acc-icon{width:48px;height:48px;border-radius:16px;background:#e0f5ed;color:var(--green);display:grid;place-items:center;font-size:23px;margin-bottom:13px}.acc-name{color:var(--muted);font-size:14px}.acc-balance{font-size:21px;font-weight:600;margin-top:4px;overflow-wrap:anywhere}
+.panel{background:var(--card);border-radius:25px;padding:18px;box-shadow:var(--shadow)}.budgetline{height:9px;background:#eeeef5;border-radius:20px;overflow:hidden;margin:12px 0}.budgetline span{display:block;height:100%;background:linear-gradient(90deg,#5a42e8,#9b59ed);border-radius:20px}.muted{color:var(--muted)}.transaction{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.transaction:last-child{border:0}.ticon{width:44px;height:44px;border-radius:15px;background:#f1efff;display:grid;place-items:center;font-size:19px}.tmain{flex:1;min-width:0}.tmain strong{display:block;font-weight:600}.tmain small{color:var(--muted);font-size:12px}.amount{font-weight:650;white-space:nowrap}.expense{color:var(--red)}.income{color:var(--green)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,560px);background:#ffffffed;backdrop-filter:blur(16px);border-radius:26px 26px 0 0;box-shadow:0 -5px 22px #26204b12;display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;color:#77798b;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px}.nav .active{color:var(--purple)}.nav .plus{width:64px;height:64px;margin:-22px auto 0;border-radius:50%;background:linear-gradient(135deg,#5740e8,#9652ed);color:#fff;font-size:31px;box-shadow:0 8px 16px #654be655}
+.page{display:none;padding:20px 18px}.page.active{display:block}.page-title{font-size:27px;font-weight:600;margin:4px 0 18px}.tabs{display:flex;background:#ececf4;border-radius:18px;padding:4px;margin:12px 0 18px}.tabs button{flex:1;background:none;border-radius:15px;padding:12px 5px;color:#77798b}.tabs button.sel{background:var(--purple);color:#fff}.field{margin:13px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none}.primary{width:100%;padding:15px;border-radius:16px;color:#fff;background:linear-gradient(110deg,#5540e8,#9654ed);font-weight:600;margin-top:12px}.secondary{padding:11px 14px;border-radius:13px;background:#f0edff;color:var(--purple)}.empty{text-align:center;padding:30px 10px;color:var(--muted)}
+.chart-wrap{display:flex;align-items:center;justify-content:center;padding:12px 0}.donut{width:190px;height:190px;border-radius:50%;background:conic-gradient(#16ad76 0 50%,#f39a23 50% 72%,#328bea 72% 86%,#9854ed 86% 100%);display:grid;place-items:center}.donut:after{content:"";width:126px;height:126px;background:#fff;border-radius:50%;position:absolute}.donut-center{position:relative;z-index:1;text-align:center}.donut-center small{display:block;color:var(--muted)}.donut-center strong{font-size:22px}.legend{display:grid;gap:12px}.legend-row{display:flex;align-items:center;gap:9px}.dot{width:11px;height:11px;border-radius:50%}.legend-row span:nth-child(2){flex:1}.hidden{display:none!important}
+.modal-bg{position:fixed;inset:0;background:#15132366;display:none;align-items:flex-end;justify-content:center;z-index:10}.modal-bg.show{display:flex}.modal{width:min(100%,560px);background:var(--bg);border-radius:26px 26px 0 0;padding:22px 20px calc(25px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;font-size:21px;font-weight:600}.close{background:#e9e8f1;border-radius:50%;width:36px;height:36px;font-size:20px}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:11px 17px;border-radius:20px;display:none;z-index:20;font-size:13px}
+@media(min-width:500px){body{padding-top:12px}.nav{bottom:12px;border-radius:25px}.app{padding-bottom:10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="profile"><div class="avatar">MM</div><div style="min-width:0"><div class="greet">Good day ☀️</div><div class="name" id="displayName">My Money Manager</div></div></div>
+ <button class="round" onclick="showPage('settings')" aria-label="Settings">⚙</button>
+</header>
+<main>
+<section id="homePage" class="page active" style="padding:0">
+ <div class="balance">
+  <div class="balance-head"><span>Total Balance <button onclick="toggleBalance()" style="background:none;color:white">◉</button></span><span class="month-pill" id="monthLabel"></span></div>
+  <div class="total" id="totalBalance">৳ 0</div>
+  <div class="summary">
+   <div class="sum"><div class="sum-icon" style="color:var(--green)">↙</div><div><small>Income</small><strong id="totalIncome">৳ 0</strong></div></div>
+   <div class="sum"><div class="sum-icon" style="color:var(--red)">↗</div><div><small>Expense</small><strong id="totalExpense">৳ 0</strong></div></div>
+  </div>
+ </div>
+ <div class="quick">
+  <button onclick="openTransaction('expense')"><span class="qicon q-red">↗</span>Expense</button>
+  <button onclick="openTransaction('income')"><span class="qicon q-green">↙</span>Income</button>
+  <button onclick="openTransaction('transfer')"><span class="qicon q-blue">⇄</span>Transfer</button>
+  <button onclick="showPage('accounts')"><span class="qicon q-orange">▣</span>Account</button>
+ </div>
+ <section class="section">
+  <div class="section-head"><h2>My Accounts</h2><button class="link" onclick="showPage('accounts')">See all</button></div>
+  <div class="accounts" id="homeAccounts"></div>
+ </section>
+ <section class="section">
+  <div class="panel">
+   <div class="section-head"><h2>Monthly Budget</h2><button class="link" onclick="showPage('reports')">Reports</button></div>
+   <div style="display:flex;justify-content:space-between"><span class="muted">This Month's Expenses</span><strong id="budgetSpent">৳ 0</strong></div>
+   <div class="budgetline"><span id="budgetProgress" style="width:0%"></span></div>
+   <div class="muted" id="budgetHint">Set your monthly budget in Settings</div>
+  </div>
+ </section>
+ <section class="section">
+  <div class="section-head"><h2>Recent Transactions</h2><button class="link" onclick="showPage('transactions')">See all</button></div>
+  <div class="panel" id="recentList"></div>
+ </section>
+</section>
+<section id="transactionsPage" class="page">
+ <div class="page-title">Transactions</div>
+ <div class="tabs"><button class="sel" data-filter="all" onclick="filterTransactions('all',this)">All</button><button data-filter="income" onclick="filterTransactions('income',this)">Income</button><button data-filter="expense" onclick="filterTransactions('expense',this)">Expense</button><button data-filter="transfer" onclick="filterTransactions('transfer',this)">Transfer</button></div>
+ <div class="panel" id="allTransactions"></div>
+</section>
+<section id="accountsPage" class="page">
+ <div class="section-head"><div class="page-title" style="margin:4px 0">Account</div><button class="secondary" onclick="openAccount()">+ Add Account</button></div>
+ <div class="accounts" id="allAccounts"></div>
+</section>
+<section id="reportsPage" class="page">
+ <div class="page-title">Reports</div>
+ <div class="panel">
+  <div class="section-head"><h2>This Month's Expenses</h2><span class="muted" id="reportMonth"></span></div>
+  <div class="chart-wrap"><div class="donut" id="donut"><div class="donut-center"><small>Total Expenses</small><strong id="chartTotal">৳ 0</strong></div></div></div>
+  <div class="legend" id="categoryLegend"></div>
+ </div>
+ <div class="panel" style="margin-top:14px">
+  <h2 style="font-size:18px;margin:0 0 8px">Monthly Summary</h2>
+  <div class="transaction"><span class="tmain">Total Income</span><strong class="income" id="reportIncome">৳ 0</strong></div>
+  <div class="transaction"><span class="tmain">Total Expenses</span><strong class="expense" id="reportExpense">৳ 0</strong></div>
+  <button class="primary" onclick="exportCSV()">Export Excel / CSV</button>
+ </div>
+</section>
+<section id="settingsPage" class="page">
+ <div class="page-title">Settings</div>
+ <div class="panel">
+  <div class="field"><label>Your Name</label><input id="userName" placeholder="Your Name"></div>
+  <div class="field"><label>Monthly Budget (৳)</label><input id="budgetInput" type="number" min="0" placeholder="e.g. 20000"></div>
+  <button class="primary" onclick="saveSettings()">Save</button>
+ </div>
+ <div class="panel" style="margin-top:14px">
+  <h2 style="font-size:18px">Data Backup</h2>
+  <p class="muted">Your data is stored in this device's browser. Download a backup file and keep it safe.</p>
+  <button class="secondary" onclick="backupData()">Download Backup</button>
+  <div class="field"><label>Restore Backup</label><input type="file" id="restoreFile" accept=".json,application/json" onchange="restoreData(event)"></div>
+ </div>
+ <div class="panel" style="margin-top:14px">
+  <h2 style="font-size:18px">Security</h2>
+  <p class="muted">PIN Lock and Fingerprint support will be added in a later step.</p>
+ </div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-page="home" onclick="showPage('home')"><span style="font-size:22px">⌂</span>Home</button>
+ <button data-page="transactions" onclick="showPage('transactions')"><span style="font-size:22px">▤</span>Transactions</button>
+ <button class="plus" onclick="openTransaction('expense')" aria-label="Add">＋</button>
+ <button data-page="reports" onclick="showPage('reports')"><span style="font-size:22px">◔</span>Reports</button>
+ <button data-page="accounts" onclick="showPage('accounts')"><span style="font-size:22px">▦</span>More</button>
+</nav>
+</div>
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modal-head"><span id="modalTitle">New Transaction</span><button class="close" onclick="closeModal()">×</button></div><div id="modalContent"></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const KEY='mmm_v1_data';
+const defaultData={name:'My Money Manager',budget:0,accounts:[{id:1,name:'Cash',type:'cash',balance:0},{id:2,name:'Bank',type:'bank',balance:0}],transactions:[]};
+let data=loadData(),showAmounts=true,currentFilter='all',editingTransactionId=null;
+const bn=n=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});
+const money=n=>'৳ '+bn(n);
+const monthStart=()=>{let d=new Date();return new Date(d.getFullYear(),d.getMonth(),1)};
+const isThisMonth=t=>{let d=new Date(t.date);let n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()};
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultData)}catch(e){return structuredClone(defaultData)}}
+function saveData(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function toast(s){let el=document.getElementById('toast');el.textContent=s;el.style.display='block';setTimeout(()=>el.style.display='none',2300)}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(p+'Page').classList.add('active');document.querySelectorAll('.nav [data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='reports')renderReports();if(p==='transactions')renderTransactions()}
+function toggleBalance(){showAmounts=!showAmounts;render()}
+function accountBalance(a){return Number(a.balance||0)}
+function monthly(){let ts=data.transactions.filter(isThisMonth);return {income:ts.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0),expense:ts.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0)}}
+function render(){let m=monthly(),total=data.accounts.reduce((s,a)=>s+accountBalance(a),0);document.getElementById('displayName').textContent=data.name||'My Money Manager';document.getElementById('monthLabel').textContent=new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'});document.getElementById('totalBalance').textContent=showAmounts?money(total):'৳ •••••';document.getElementById('totalIncome').textContent=showAmounts?money(m.income):'৳ •••';document.getElementById('totalExpense').textContent=showAmounts?money(m.expense):'৳ •••';document.getElementById('budgetSpent').textContent=money(m.expense);let pct=data.budget?Math.min(100,m.expense/data.budget*100):0;document.getElementById('budgetProgress').style.width=pct+'%';document.getElementById('budgetHint').textContent=data.budget?'Budget '+money(data.budget)+' • '+bn(pct)+'% used':'Set a monthly budget in Settings';document.getElementById('homeAccounts').innerHTML=data.accounts.slice(0,4).map(accountHTML).join('')||'<div class="empty">কোনো Account নেই</div>';document.getElementById('allAccounts').innerHTML=data.accounts.map(accountHTML).join('')||'<div class="empty">Add Account</div>';document.getElementById('recentList').innerHTML=transactionHTML(data.transactions.slice().sort((a,b)=>b.id-a.id).slice(0,5));renderTransactions();renderReports()}
+function accountHTML(a){let ico=a.type==='bank'?'▤':a.type==='mobile'?'▣':'▢';return `<div class="account" onclick="editAccount(${a.id})"><div class="acc-icon">${ico}</div><div class="acc-name">${esc(a.name)}</div><div class="acc-balance">${money(a.balance)}</div></div>`}
+function transactionHTML(ts){if(!ts.length)return '<div class="empty">No transactions yet<br>Tap the + button to get started</div>';return ts.map(t=>{let sign=t.type==='income'?'+':t.type==='expense'?'−':'⇄';let cls=t.type==='income'?'income':t.type==='expense'?'expense':'';let acc=data.accounts.find(a=>a.id===t.accountId);return `<div class="transaction"><div class="ticon">${t.type==='income'?'↙':t.type==='expense'?'↗':'⇄'}</div><div class="tmain"><strong>${esc(t.category|| (t.type==='transfer'?'Transfer':'Other'))}</strong><small>${esc(acc?.name||'Account')} • ${new Date(t.date).toLocaleDateString('en-GB')}</small></div><div style="text-align:right"><div class="amount ${cls}">${sign} ${money(t.amount)}</div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:5px"><button class="link" onclick="editTransaction(${t.id})">Edit</button><button class="link" style="color:var(--red)" onclick="deleteTransaction(${t.id})">Delete</button></div></div></div>`}).join('')}
+function renderTransactions(){let list=data.transactions.filter(t=>currentFilter==='all'||t.type===currentFilter).slice().sort((a,b)=>b.id-a.id);document.getElementById('allTransactions').innerHTML=transactionHTML(list)}
+function filterTransactions(f,el){currentFilter=f;document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');renderTransactions()}
+function renderReports(){let m=monthly(),expenses=data.transactions.filter(t=>t.type==='expense'&&isThisMonth(t)),cats={};expenses.forEach(t=>cats[t.category||'Other']=(cats[t.category||'Other']||0)+t.amount);let entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);let colors=['#16ad76','#f39a23','#328bea','#9854ed','#ef4945','#12a9b5','#a1a1aa'];let total=entries.reduce((s,e)=>s+e[1],0);let pos=0,stops=entries.map((e,i)=>{let end=pos+(total?e[1]/total*100:0),s=`${colors[i%colors.length]} ${pos}% ${end}%`;pos=end;return s}).join(', ');document.getElementById('donut').style.background=entries.length?`conic-gradient(${stops})`:'#e9e9f1';document.getElementById('chartTotal').textContent=money(total);document.getElementById('reportMonth').textContent=new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'});document.getElementById('reportIncome').textContent=money(m.income);document.getElementById('reportExpense').textContent=money(m.expense);document.getElementById('categoryLegend').innerHTML=entries.length?entries.map((e,i)=>`<div class="legend-row"><i class="dot" style="background:${colors[i%colors.length]}"></i><span>${esc(e[0])}</span><strong>${money(e[1])}</strong></div>`).join(''):'<div class="empty">No expense data for this month</div>'}
+function openModal(title,html){document.getElementById('modalTitle').textContent=title;document.getElementById('modalContent').innerHTML=html;document.getElementById('modalBg').classList.add('show')}
+function closeModal(){document.getElementById('modalBg').classList.remove('show')}
+function openTransaction(type){let types=[['expense','Expense'],['income','Income'],['transfer','Transfer']];let opts=data.accounts.map(a=>`<option value="${a.id}">${esc(a.name)} (${money(a.balance)})</option>`).join('');openModal('New Transaction',`<div class="tabs">${types.map(([v,l])=>`<button class="${v===type?'sel':''}" onclick="openTransaction('${v}')">${l}</button>`).join('')}</div><form onsubmit="saveTransaction(event,'${type}')"><div class="field"><label>Amount (৳)</label><input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div>${type==='transfer'?`<div class="field"><label>From Account</label><select name="from">${opts}</select></div><div class="field"><label>To Account</label><select name="to">${opts}</select></div>`:`<div class="field"><label>Account</label><select name="accountId">${opts}</select></div><div class="field"><label>Category</label><select name="category">${(type==='income'?['Salary','Business','Other Income']:['Food & Dining','Transport','Groceries','Bills','Family','Health','Other']).map(x=>`<option>${x}</option>`).join('')}</select></div>`}<div class="field"><label>Date</label><input name="date" type="date" value="${new Date().toISOString().slice(0,10)}" required></div><div class="field"><label>Note (optional)</label><input name="note" placeholder="Add details"></div><button class="primary">Save</button></form>`)}
+function saveTransaction(e,type){e.preventDefault();let f=new FormData(e.target),amount=Number(f.get('amount'));if(!Number.isFinite(amount)||amount<=0)return toast('Enter a valid amount');let old=editingTransactionId?data.transactions.find(x=>x.id===editingTransactionId):null;if(old)reverseTransaction(old);let t={id:old?old.id:Date.now(),type,amount,date:f.get('date')+'T12:00:00',category:f.get('category')||'Transfer',note:f.get('note')||''};if(type==='transfer'){let from=Number(f.get('from')),to=Number(f.get('to'));if(from===to){if(old)applyTransaction(old);return toast('Choose two different accounts')}let a=data.accounts.find(x=>x.id===from),b=data.accounts.find(x=>x.id===to);if(!a||!b||a.balance<amount){if(old)applyTransaction(old);return toast('Insufficient account balance')}a.balance-=amount;b.balance+=amount;t.accountId=from;t.toAccountId=to}else{let a=data.accounts.find(x=>x.id===Number(f.get('accountId')));if(!a){if(old)applyTransaction(old);return toast('Select an account')}if(type==='expense'&&a.balance<amount){if(old)applyTransaction(old);return toast('Insufficient account balance')}a.balance+=type==='income'?amount:-amount;t.accountId=a.id}if(old)data.transactions=data.transactions.filter(x=>x.id!==old.id);data.transactions.push(t);editingTransactionId=null;closeModal();saveData();toast(old?'Transaction updated':'Transaction saved')}
+
+function reverseTransaction(t){if(t.type==='transfer'){let from=data.accounts.find(a=>a.id===t.accountId),to=data.accounts.find(a=>a.id===t.toAccountId);if(from)from.balance+=t.amount;if(to)to.balance-=t.amount;}else{let a=data.accounts.find(a=>a.id===t.accountId);if(a)a.balance+=t.type==='income'?-t.amount:t.amount;}}
+function deleteTransaction(id){let t=data.transactions.find(x=>x.id===id);if(!t)return;if(!confirm('Delete this transaction? The account balance will be adjusted.'))return;reverseTransaction(t);data.transactions=data.transactions.filter(x=>x.id!==id);saveData();toast('Transaction deleted');}
+function applyTransaction(t){if(t.type==='transfer'){let from=data.accounts.find(a=>a.id===t.accountId),to=data.accounts.find(a=>a.id===t.toAccountId);if(from)from.balance-=t.amount;if(to)to.balance+=t.amount;}else{let a=data.accounts.find(a=>a.id===t.accountId);if(a)a.balance+=t.type==='income'?t.amount:-t.amount;}}
+function editTransaction(id){let t=data.transactions.find(x=>x.id===id);if(!t)return;editingTransactionId=id;openTransaction(t.type);let form=document.querySelector('#modalContent form');if(!form)return;form.elements.amount.value=t.amount;form.elements.date.value=t.date.slice(0,10);if(form.elements.category)form.elements.category.value=t.category||'Other';if(form.elements.note)form.elements.note.value=t.note||'';if(form.elements.accountId)form.elements.accountId.value=t.accountId;if(form.elements.from)form.elements.from.value=t.accountId;if(form.elements.to)form.elements.to.value=t.toAccountId;document.getElementById('modalTitle').textContent='Edit Transaction';}
+
+function openAccount(){openModal('New Account',`<form onsubmit="saveAccount(event)"><div class="field"><label>Account Name</label><input name="name" required placeholder="e.g. bKash"></div><div class="field"><label>Type</label><select name="type"><option value="cash">Cash</option><option value="bank">Bank</option><option value="mobile">Mobile Banking</option></select></div><div class="field"><label>Opening Balance (৳)</label><input name="balance" type="number" min="0" step=".01" value="0"></div><button class="primary">Add Account</button></form>`)}
+function saveAccount(e){e.preventDefault();let f=new FormData(e.target);data.accounts.push({id:Date.now(),name:f.get('name'),type:f.get('type'),balance:Number(f.get('balance')||0)});closeModal();saveData();toast('Account added')}
+function editAccount(id){let a=data.accounts.find(x=>x.id===id);if(!a)return;openModal('Edit Account',`<form onsubmit="updateAccount(event,${id})"><div class="field"><label>Name</label><input name="name" value="${esc(a.name)}" required></div><div class="field"><label>Adjust Balance</label><input name="balance" type="number" step=".01" value="${a.balance}" required></div><button class="primary">Update</button><button type="button" class="secondary" style="width:100%;margin-top:10px" onclick="deleteAccount(${id})">Delete Account</button></form>`)}
+function updateAccount(e,id){e.preventDefault();let a=data.accounts.find(x=>x.id===id),f=new FormData(e.target);a.name=f.get('name');a.balance=Number(f.get('balance'));closeModal();saveData();toast('Updated')}
+function deleteAccount(id){if(data.accounts.length<2)return toast('At least one account is required');if(data.transactions.some(t=>t.accountId===id||t.toAccountId===id))return toast('This account has transactions and cannot be deleted');if(!confirm('Delete this account?'))return;data.accounts=data.accounts.filter(a=>a.id!==id);closeModal();saveData()}
+function saveSettings(){data.name=document.getElementById('userName').value.trim()||'My Money Manager';data.budget=Number(document.getElementById('budgetInput').value||0);saveData();toast('Settings saved')}
+function backupData(){download('my-money-manager-backup.json',JSON.stringify(data,null,2),'application/json');toast('Backup download started')}
+function restoreData(e){let file=e.target.files[0];if(!file)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.accounts)||!Array.isArray(d.transactions))throw Error();data=d;saveData();toast('Backup restored')}catch(err){toast('Invalid backup file')}};r.readAsText(file)}
+function exportCSV(){let rows=[['Date','Type','Category','Account','Amount','Note']];data.transactions.filter(isThisMonth).forEach(t=>{let a=data.accounts.find(x=>x.id===t.accountId);rows.push([t.date.slice(0,10),t.type,t.category||'',a?.name||'',t.amount,t.note||''])});let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');download('my-money-manager-'+new Date().toISOString().slice(0,7)+'.csv',csv,'text/csv;charset=utf-8');toast('CSV file is being prepared')}
+function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('userName').value=data.name||'';document.getElementById('budgetInput').value=data.budget||'';render();
+</script>
+</body>
+</html>
